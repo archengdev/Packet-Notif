@@ -27,16 +27,12 @@ title.grid(row=0,column=1,columnspan=2,pady=5)
 
 # , label_text="Select which dungeons you want to be notified for"
 # for the list of dungeons to select
-frame = ctk.CTkCanvas(root, bg='black')
+frame = ctk.CTkScrollableFrame(root, label_text="Select which dungeons you want to be notified for")
 frame.grid(row=1,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
 
 
-
-photoimage = ImageTk.PhotoImage(file="./dungeons/udl.png")
-
-
 # start button
-start = ctk.CTkButton(root, image=photoimage)
+start = ctk.CTkButton(root)
 start.grid(row=2,column=1)
 
 # stop button
@@ -81,37 +77,35 @@ hist.grid(row=3,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
 # tk.Button(root,image=t2).pack(side="top")
 # tk.Button(root, image=test).pack(side="top")
 
-# imgs =[]
-# labels=[]
-# for i, file in enumerate(dung_files):
-#     img = Image.open(dung_dir + file).resize((30, 30))
-#     print(img.mode)
-#     img = ImageTk.PhotoImage(Image.open(dung_dir + file).resize((30, 30)))
+def tester(dung_idx):
+    print(dung_idx)
+
+def func(val):
+    return lambda: tester(val)
+
+
+
+imgs =[]
+buttons=[]
+for i, file in enumerate(dung_files):
+    # img = Image.open(dung_dir + file).resize((30, 30))
+    # print(img.mode)
+    img = ctk.CTkImage(Image.open(dung_dir + file).resize((30, 30)))
     
-#     imgs.append(img)
-#     # img.configure()
-#     l1 = tk.Label(frame, image=imgs[i])
-#     labels.append(l1)
+    imgs.append(img)
+    # img.configure()
+    button = ctk.CTkButton(frame, image=imgs[i],text="",width=35, command=func(i))
+    buttons.append(button)
 
 
-# for label in labels:
-#     label.pack(side='left', anchor='nw')
+for button in buttons:
+    button.pack(side='left', anchor='nw')
 
 
-# frame.create_image(150,150,image=photoimage)
-imgs = []
-for file in dung_files:
-    im = Image.open(dung_dir + file).resize((30,30))
-    image = ImageTk.PhotoImage(im)
-    imgs.append(image)
-
-for i in range(60):
-    frame.create_image(0+i*10,0+i*10,image=imgs[i])
 
 # i2 = ImageTk.PhotoImage(Image.open(dung_dir + 'aby.png').resize((30, 30)))
 # # img.configure()
 # l2 = tk.Label(frame, image=i2)
-# # label.image = img # this feels redundant but the image didn't show up without it in my app
 # l2.pack(side='left', anchor='nw')
 
 
