@@ -1,16 +1,14 @@
-import tkinter as tk
-from tkinter import ttk
-from PIL import ImageTk, Image
+from PIL import Image
 import customtkinter as ctk
-import os
+from os import listdir
+
 
 dung_dir = './dungeons/'
-dung_files = os.listdir(dung_dir)
-print(len(dung_files))
+dung_files = listdir(dung_dir)
 
 root = ctk.CTk()
 root.title("Packet Sniffer")
-root.geometry("550x500")
+root.geometry("700x500")
 root.iconbitmap('./logo.ico')
 
 root.columnconfigure(0, weight=1)
@@ -29,9 +27,9 @@ title.grid(row=0,column=1,columnspan=2,pady=5)
 # for the list of dungeons to select
 frame = ctk.CTkFrame(root)
 frame.grid(row=1,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
-for i in range(6):
-    frame.columnconfigure(i, weight=1)
 for i in range(10):
+    frame.columnconfigure(i, weight=1)
+for i in range(6):
     frame.rowconfigure(i, weight=1)
 
 
@@ -46,10 +44,6 @@ stop.grid(row=2,column=2)
 # # dungeon history
 hist = ctk.CTkScrollableFrame(root,orientation="horizontal",height=37,
                               label_text="Recently popped dungeons")
-
-# label_text_color
-# label_fg_color
-# label_font
 
 hist._scrollbar.configure(height=12)
 hist.grid(row=3,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
@@ -72,15 +66,19 @@ def func(val):
 idx_to_file = {}
 want_notif = [0] * 60
 
+class DungeonButton(ctk.CTkButton):
+    def __init__(self, img, command):
+        super(DungeonButton, self).__init__(frame, image=img, command=command,text="",width=60,hover_color='#32a852')
+
+
 imgs =[]
 buttons=[]
 for i, file in enumerate(dung_files):
-    img = ctk.CTkImage(Image.open(dung_dir + file).resize((50, 50)))
+    img = ctk.CTkImage(Image.open(dung_dir + file))
     idx_to_file[i] = file
     
     imgs.append(img)
-    # img.configure()
-    button = ctk.CTkButton(frame, image=imgs[i],text="",width=60, command=func(i), hover_color='#32a852')
+    button = DungeonButton(imgs[i], func(i))
     buttons.append(button)
 
 row = 0
@@ -88,7 +86,7 @@ col = 0
 for button in buttons:
     button.grid(row=row, column = col,sticky="nsew")
     col += 1
-    if col > 5:
+    if col > 9:
         row += 1
         col = 0
 
