@@ -27,8 +27,12 @@ title.grid(row=0,column=1,columnspan=2,pady=5)
 
 # , label_text="Select which dungeons you want to be notified for"
 # for the list of dungeons to select
-frame = ctk.CTkScrollableFrame(root, label_text="Select which dungeons you want to be notified for")
+frame = ctk.CTkFrame(root)
 frame.grid(row=1,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
+for i in range(6):
+    frame.columnconfigure(i, weight=1)
+for i in range(10):
+    frame.rowconfigure(i, weight=1)
 
 
 # start button
@@ -51,72 +55,41 @@ hist._scrollbar.configure(height=12)
 hist.grid(row=3,column=0,columnspan=4,sticky="nsew",pady=5,padx=5)
 
 
-# for x in range(20):
-#     customtkinter.CTkButton(frame, text="button").pack(pady=10)
-
-# file = './dungeons/3d.png'
-
-# image = Image.open(file)
-
-
-# img = ImageTk.PhotoImage(image.resize((50, 50))) 
-# label = tk.Label(root, image=img)
-# label.image = img
-# label.pack()
-# aby = ImageTk.PhotoImage(Image.open("./dungeons/3d.png"))
-# abyl = tk.Label(frame, image=aby)
-# abyl.pack(side='left')
-# udl = ImageTk.PhotoImage(Image.open("./dungeons/udl.png"))
-# udll = tk.Label(root,image=udl)
-
-
-# forax = tk.PhotoImage(file=r"./dungeons/forax.png")
-# threed = tk.PhotoImage(file=r"./dungeons/snake.png")
-# test = forax.subsample(3,3)
-# t2 = threed.subsample(3,3)
-# tk.Button(root,image=t2).pack(side="top")
-# tk.Button(root, image=test).pack(side="top")
-
 def tester(dung_idx):
-    print(dung_idx)
+    if want_notif[dung_idx]:
+        # is already gray, change back
+        buttons[dung_idx].configure(fg_color='blue', hover_color = 'blue')
+        want_notif[dung_idx] = 0
+    else:
+        # change color to gray
+        buttons[dung_idx].configure(fg_color='gray', hover_color = 'gray')
+        want_notif[dung_idx] = 1
+    # print(dung_idx)
 
 def func(val):
     return lambda: tester(val)
 
-
+idx_to_file = {}
+want_notif = [0] * 60
 
 imgs =[]
 buttons=[]
 for i, file in enumerate(dung_files):
-    # img = Image.open(dung_dir + file).resize((30, 30))
-    # print(img.mode)
-    img = ctk.CTkImage(Image.open(dung_dir + file).resize((30, 30)))
+    img = ctk.CTkImage(Image.open(dung_dir + file).resize((50, 50)))
+    idx_to_file[i] = file
     
     imgs.append(img)
     # img.configure()
-    button = ctk.CTkButton(frame, image=imgs[i],text="",width=35, command=func(i))
+    button = ctk.CTkButton(frame, image=imgs[i],text="",width=60, command=func(i), hover_color='#32a852')
     buttons.append(button)
 
-
+row = 0
+col = 0
 for button in buttons:
-    button.pack(side='left', anchor='nw')
-
-
-
-# i2 = ImageTk.PhotoImage(Image.open(dung_dir + 'aby.png').resize((30, 30)))
-# # img.configure()
-# l2 = tk.Label(frame, image=i2)
-# l2.pack(side='left', anchor='nw')
-
+    button.grid(row=row, column = col,sticky="nsew")
+    col += 1
+    if col > 5:
+        row += 1
+        col = 0
 
 root.mainloop()
-
-
-# def add_to_list(event=None):
-#     text = entry.get()
-#     if text:
-#         text_list.insert(tk.END, text)
-#         entry.delete(0, tk.END)
-
-
-# entry_btn = ttk.Button(frame, text="add", command = add_to_list)
